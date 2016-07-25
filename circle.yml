@@ -1,0 +1,30 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - docker info
+    - docker pull tklx/echo:latest || true
+    - docker build -t tklx/echo:latest .
+
+test:
+  pre:
+    - git clone https://github.com/tklx/bats.git
+    - sudo bats/install.sh /usr/local
+  override:
+    - IMAGE=tklx/echo:latest bats --tap tests/basics.bat
+
+deployment:
+  pre:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+  latest:
+    branch: master
+    commands:
+      - docker push tklx/echo:latest
+  release:
+    tag: /^([0-9]+)\.([0-9]+)\.([0-9]+)$/
+    owner: tklx
+    commands:
+      - docker tag tklx/echo:latest tklx/echo:$CIRCLE_TAG
+      - docker push tklx/echo:$CIRCLE_TAG
