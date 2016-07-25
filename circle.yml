@@ -7,6 +7,7 @@ dependencies:
     - docker info
     - docker pull tklx/echo:latest || true
     - docker build -t tklx/echo:latest .
+    - docker images
 
 test:
   pre:
