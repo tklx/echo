@@ -13,7 +13,7 @@ test:
     - git clone https://github.com/tklx/bats.git
     - sudo bats/install.sh /usr/local
   override:
-    - IMAGE=tklx/echo:latest bats --tap tests/basics.bat
+    - IMAGE=tklx/echo:latest bats --tap tests/basics.bats
 
 deployment:
   latest:
